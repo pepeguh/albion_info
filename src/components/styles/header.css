@@ -1,0 +1,23 @@
+*{
+    font-weight: 600;
+}
+.mainDiv {
+  height: 50px;
+  border: 2px solid darkred;
+  padding: 5px;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+.goldCost {
+  padding: 7px;
+  width: fit-content;
+  height: fit-content;
+  color: gold;
+  background-color: rgba(255, 217, 0, 0.151);
+  border-radius: 20%;
+}
+.searchDiv{
+    display: flex;
+
+}
