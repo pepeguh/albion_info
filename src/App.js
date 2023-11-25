@@ -6,7 +6,7 @@ function App() {
   return (
     <div style={{background:'#171717', height:'100vh'}}>
       <Header/>
-
+      <Home/>
     </div>
   );
 }
