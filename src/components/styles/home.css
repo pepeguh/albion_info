@@ -1,3 +1,50 @@
-.main_div{
-    color:aliceblue
+.main_div {
+  color: aliceblue;
+}
+.render_div {
+  border: 2px solid gold;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Три колонки с равными долями ширины */
+  gap: 16px; /* Расстояние между элементами в сетке */
+}
+.item_img {
+  width: 70px;
+}
+.color_div {
+  display: flex;
+}
+.color_div p {
+  padding-left: 8px;
+}
+.item_div{
+   display: flexbox;
+}
+
+
+
+
+
+
+
+
+
+
+
+.Lymhurst {
+  color: #15e831;
+}
+.Bridgewatch {
+  color: #ffee49;
+}
+.Caerleon {
+  color: #cb171d;
+}
+.Fort_Sterling {
+  color: #e2feff;
+}
+.Martlock {
+  color: #2cdbff;
+}
+.Thetford {
+  color: #e815e1;
 }

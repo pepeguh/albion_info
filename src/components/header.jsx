@@ -8,14 +8,14 @@ const Header = () => {
   const dispatch = useDispatch();
   const [goldCost, setGoldCost] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedCity, setSelectedCity] = useState(null);
+  // const [selectedCity, setSelectedCity] = useState(null);
   const [selectedTier, setSelectedTier] = useState(null);
   const [selectedResourse, setSelectedResourse] = useState(null);
   const [selectedEnchantment, setSelectedEnchantment] = useState(null);
 
 
   const baseUrl = "https://east.albion-online-data.com/api/v2/stats/Prices/";
-  const baseMidUrl = ".json?locations=";
+  const baseMidUrl = `.json?locations=Lymhurst,Fort Sterling,Bridgewatch,Martlock,Thetford,Caerleon`;
   const baseEndUrl = "&qualities=1";
   useEffect(() => {
     setIsLoading(true);
@@ -30,44 +30,44 @@ const Header = () => {
     };
     asFunc();
   }, []);
-  const cityOptions = [
-    { value: "Caerleon", label: "Caerleon" },
-    { value: "Lymhurst", label: "Lymhurst" },
-    { value: "Bridgewatch", label: "Bridgewatch" },
-    { value: "Martlock", label: "Martlock" },
-    { value: "Thetford", label: "Thetford" },
-    { value: "Fort Sterling", label: "Fort Sterling" },
-  ];
-  const customCityStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      color: state.isSelected ? "" : getCityColor(state.data.value),
-      backgroundColor: state.isSelected
-        ? getCityColor(state.data.value)
-        : "#171717",
-    }),
-    singleValue: (provided, state) => ({
-      ...provided,
-      color: getCityColor(selectedCity?.value),
-    }),
-  };
+  // const cityOptions = [
+  //   { value: "Caerleon", label: "Caerleon" },
+  //   { value: "Lymhurst", label: "Lymhurst" },
+  //   { value: "Bridgewatch", label: "Bridgewatch" },
+  //   { value: "Martlock", label: "Martlock" },
+  //   { value: "Thetford", label: "Thetford" },
+  //   { value: "Fort Sterling", label: "Fort Sterling" },
+  // ];
+  // const customCityStyles = {
+  //   option: (provided, state) => ({
+  //     ...provided,
+  //     color: state.isSelected ? "" : getCityColor(state.data.value),
+  //     backgroundColor: state.isSelected
+  //       ? getCityColor(state.data.value)
+  //       : "#171717",
+  //   }),
+  //   singleValue: (provided, state) => ({
+  //     ...provided,
+  //     color: getCityColor(selectedCity?.value),
+  //   }),
+  // };
 
-  const getCityColor = (city) => {
-    switch (city) {
-      case "Lymhurst":
-        return "#15E831";
-      case "Caerleon":
-        return "#CB171D";
-      case "Thetford":
-        return "#E815E1";
-      case "Bridgewatch":
-        return "#FFEE49";
-      case "Martlock":
-        return "#2CDBFF";
-      case "Fort Sterling":
-        return "#E2FEFF";
-    }
-  };
+  // const getCityColor = (city) => {
+  //   switch (city) {
+  //     case "Lymhurst":
+  //       return "#15E831";
+  //     case "Caerleon":
+  //       return "#CB171D";
+  //     case "Thetford":
+  //       return "#E815E1";
+  //     case "Bridgewatch":
+  //       return "#FFEE49";
+  //     case "Martlock":
+  //       return "#2CDBFF";
+  //     case "Fort Sterling":
+  //       return "#E2FEFF";
+  //   }
+  // };
   const tierOptions = [
     { value: "T1_", label: "T1" },
     { value: "T2_", label: "T2" },
@@ -121,30 +121,37 @@ const Header = () => {
   const resourseOptions = [{ value: "WOOD", label: "Wood" }];
 
   const startSearch = async () => {
-    console.log(`Поиск в ${selectedCity.value};
+    console.log(`
     Ресурс ${selectedResourse.label}
-    Тир ${selectedTier.label}.${selectedEnchantment.label}`);
+    Тир ${selectedTier.label}.`);
     let result;
+    let middleware='';
+    for(let i=0; i<enchantmentOptions.length;i++){
+      middleware=middleware+selectedTier.value+selectedResourse.value+enchantmentOptions[i].value+','
+    }
     try {
       result = await fetch(
-        baseUrl +
-          selectedTier.value +
-          selectedResourse.value +
-          selectedEnchantment.value +
+        baseUrl + 
+        middleware+
+          // selectedTier.value +
+          // selectedResourse.value +
+          // selectedEnchantment.value +
           baseMidUrl +
-          selectedCity.value +
+          // selectedCity.value +
           baseEndUrl
       );
       result = await result.json();
-      if (result[0].buy_price_max == 0) {
-        console.log("Автозакуп не найден");
-        return;
-      } else if (result[0].sell_price_min == 0) {
-        console.log("Товар не найден");
-        return;
-      }
+      console.log(result)
+      // if (result[0].buy_price_max == 0) {
+      //   console.log("Автозакуп не найден");
+      //   return;
+      // } else if (result[0].sell_price_min == 0) {
+      //   console.log("Товар не найден");
+      //   return;
+      // }
       dispatch(clearData())
-      dispatch(addArray( result))
+      middleware='';
+      dispatch(addArray(result))
       console.log(`Максимальная цена автозакупа :${result[0].buy_price_max}
 Минимальная цена на товар:${result[0].sell_price_min}`);
     } catch (e) {
@@ -155,12 +162,12 @@ const Header = () => {
   return (
     <div className="mainDiv">
       <div className="searchDiv">
-        <Select
+        {/* <Select
           options={cityOptions}
           styles={customCityStyles}
           onChange={(selectedOption) => setSelectedCity(selectedOption)}
           getOptionValue={(option) => option.value}
-        />
+        /> */}
         <Select
           options={tierOptions}
           styles={customTierStyles}
@@ -172,10 +179,7 @@ const Header = () => {
           options={resourseOptions}
           onChange={(selectedOption) => setSelectedResourse(selectedOption)}
         />
-        <Select
-          options={enchantmentOptions}
-          onChange={(selectedOption) => setSelectedEnchantment(selectedOption)}
-        />
+        
         <button onClick={startSearch}>Поиск</button>
       </div>
       {isLoading ? (
