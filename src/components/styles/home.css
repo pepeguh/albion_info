@@ -1,11 +1,22 @@
 .main_div {
   color: aliceblue;
 }
+.m_p{
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
 .render_div {
+  font-size: small;
   border: 2px solid gold;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Три колонки с равными долями ширины */
-  gap: 16px; /* Расстояние между элементами в сетке */
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); 
+  gap: 16px; 
 }
 .item_img {
   width: 70px;
@@ -16,35 +27,44 @@
 .color_div p {
   padding-left: 8px;
 }
-.item_div{
-   display: flexbox;
+
+.prices_div {
+  display: flex;
 }
-
-
-
-
-
-
-
-
-
-
 
 .Lymhurst {
-  color: #15e831;
+ 
+  background-color: #15e831;
+  border-radius: 20%;
+  color: black;
 }
 .Bridgewatch {
-  color: #ffee49;
+  
+  background-color: #ffee49;
+  border-radius: 20%;
+  color: black;
 }
 .Caerleon {
-  color: #cb171d;
+  
+  background-color: #cb171d;
+  border-radius: 20%;
+  color: black;
 }
 .Fort_Sterling {
-  color: #e2feff;
+  
+  background-color: #e2feff;
+  border-radius: 20%;
+  color: black;
 }
 .Martlock {
-  color: #2cdbff;
+ 
+  background-color: #2cdbff;
+  border-radius: 20%;
+  color: black;
 }
 .Thetford {
-  color: #e815e1;
+ 
+  background-color: #e815e1;
+  border-radius: 20%;
+  color: black;
 }

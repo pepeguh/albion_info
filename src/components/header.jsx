@@ -13,10 +13,13 @@ const Header = () => {
   const [selectedResourse, setSelectedResourse] = useState(null);
   const [selectedEnchantment, setSelectedEnchantment] = useState(null);
 
-
   const baseUrl = "https://east.albion-online-data.com/api/v2/stats/Prices/";
   const baseMidUrl = `.json?locations=Lymhurst,Fort Sterling,Bridgewatch,Martlock,Thetford,Caerleon`;
   const baseEndUrl = "&qualities=1";
+  let enchantmentOptions = [
+    { value: "", label: "0" }
+   
+  ];
   useEffect(() => {
     setIsLoading(true);
     const asFunc = async () => {
@@ -30,6 +33,11 @@ const Header = () => {
     };
     asFunc();
   }, []);
+  useEffect(() => {
+    if (selectedTier !== null) {
+      
+    }
+  }, [selectedTier]);
   // const cityOptions = [
   //   { value: "Caerleon", label: "Caerleon" },
   //   { value: "Lymhurst", label: "Lymhurst" },
@@ -111,28 +119,47 @@ const Header = () => {
         return "#E4E3E0";
     }
   };
-  const enchantmentOptions = [
-    { value: "", label: "0" },
-    { value: "_LEVEL1@1", label: "1" },
-    { value: "_LEVEL2@2", label: "2" },
-    { value: "_LEVEL3@3", label: "3" },
-    { value: "_LEVEL4@4", label: "4" },
-  ];
-  const resourseOptions = [{ value: "WOOD", label: "Wood" }];
+
+  const resourseOptions = [
+    { value: "WOOD", label: "Дерево" },
+    {value:'ROCK', label:"Камень"},
+    {value:'ORE', label:"Руда"},
+    {value:'HIDE', label:"Шкура"},
+    {value:'FIBER', label:"Хлопок"},
+    {value:'LEATHER', label:"Кожа"}
+    
+];
 
   const startSearch = async () => {
-    console.log(`
-    Ресурс ${selectedResourse.label}
-    Тир ${selectedTier.label}.`);
+    if (
+      selectedTier.label == "T1" ||
+      selectedTier.label == "T2" ||
+      selectedTier.label == "T3"
+    ) {
+      enchantmentOptions = [{ value: "", label: "0" }];
+    } else {
+      enchantmentOptions = [
+        { value: "", label: "0" },
+        { value: "_LEVEL1@1", label: "1" },
+        { value: "_LEVEL2@2", label: "2" },
+        { value: "_LEVEL3@3", label: "3" },
+        { value: "_LEVEL4@4", label: "4" },
+      ];
+    }
     let result;
-    let middleware='';
-    for(let i=0; i<enchantmentOptions.length;i++){
-      middleware=middleware+selectedTier.value+selectedResourse.value+enchantmentOptions[i].value+','
+    let middleware = "";
+    for (let i = 0; i < enchantmentOptions.length; i++) {
+      middleware =
+        middleware +
+        selectedTier.value +
+        selectedResourse.value +
+        enchantmentOptions[i].value +
+        ",";
     }
     try {
       result = await fetch(
-        baseUrl + 
-        middleware+
+        baseUrl +
+          middleware +
           // selectedTier.value +
           // selectedResourse.value +
           // selectedEnchantment.value +
@@ -141,7 +168,7 @@ const Header = () => {
           baseEndUrl
       );
       result = await result.json();
-      console.log(result)
+      console.log(result);
       // if (result[0].buy_price_max == 0) {
       //   console.log("Автозакуп не найден");
       //   return;
@@ -149,9 +176,9 @@ const Header = () => {
       //   console.log("Товар не найден");
       //   return;
       // }
-      dispatch(clearData())
-      middleware='';
-      dispatch(addArray(result))
+      dispatch(clearData());
+      middleware = "";
+      dispatch(addArray(result));
       console.log(`Максимальная цена автозакупа :${result[0].buy_price_max}
 Минимальная цена на товар:${result[0].sell_price_min}`);
     } catch (e) {
@@ -179,7 +206,7 @@ const Header = () => {
           options={resourseOptions}
           onChange={(selectedOption) => setSelectedResourse(selectedOption)}
         />
-        
+
         <button onClick={startSearch}>Поиск</button>
       </div>
       {isLoading ? (
