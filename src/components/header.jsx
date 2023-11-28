@@ -16,10 +16,7 @@ const Header = () => {
   const baseUrl = "https://east.albion-online-data.com/api/v2/stats/Prices/";
   const baseMidUrl = `.json?locations=Lymhurst,Fort Sterling,Bridgewatch,Martlock,Thetford,Caerleon`;
   const baseEndUrl = "&qualities=1";
-  let enchantmentOptions = [
-    { value: "", label: "0" }
-   
-  ];
+  let enchantmentOptions = [{ value: "", label: "0" }];
   useEffect(() => {
     setIsLoading(true);
     const asFunc = async () => {
@@ -35,7 +32,6 @@ const Header = () => {
   }, []);
   useEffect(() => {
     if (selectedTier !== null) {
-      
     }
   }, [selectedTier]);
   // const cityOptions = [
@@ -121,14 +117,27 @@ const Header = () => {
   };
 
   const resourseOptions = [
-    { value: "WOOD", label: "Дерево" },
-    {value:'ROCK', label:"Камень"},
-    {value:'ORE', label:"Руда"},
-    {value:'HIDE', label:"Шкура"},
-    {value:'FIBER', label:"Хлопок"},
-    {value:'LEATHER', label:"Кожа"}
-    
-];
+    {
+      label: "Ресурсы",
+      options: [
+        { value: "WOOD", label: "Дерево" },
+        { value: "ROCK", label: "Камень" },
+        { value: "ORE", label: "Руда" },
+        { value: "HIDE", label: "Шкура" },
+        { value: "FIBER", label: "Хлопок" },
+      ],
+    },
+    {
+      label: "Материалы",
+      options: [
+        { value: "PLANKS", label: "Доски" },
+        { value: "STONEBLOCK", label: "Камменые блоки" },
+        { value: "METALBAR", label: "Слитки" },
+        { value: "LEATHER", label: "Кожа" },
+        { value: "CLOTH", label: "Ткань" },
+      ],
+    },
+  ];
 
   const startSearch = async () => {
     if (
@@ -138,13 +147,24 @@ const Header = () => {
     ) {
       enchantmentOptions = [{ value: "", label: "0" }];
     } else {
-      enchantmentOptions = [
-        { value: "", label: "0" },
-        { value: "_LEVEL1@1", label: "1" },
-        { value: "_LEVEL2@2", label: "2" },
-        { value: "_LEVEL3@3", label: "3" },
-        { value: "_LEVEL4@4", label: "4" },
-      ];
+      if (selectedResourse.value == "ROCK") {
+        enchantmentOptions = [
+          { value: "", label: "0" },
+          { value: "_LEVEL1@1", label: "1" },
+          { value: "_LEVEL2@2", label: "2" },
+          { value: "_LEVEL3@3", label: "3" },
+        ];
+      } else if (selectedResourse.value == "STONEBLOCK") {
+        enchantmentOptions = [{ value: "", label: "0" }];
+      } else {
+        enchantmentOptions = [
+          { value: "", label: "0" },
+          { value: "_LEVEL1@1", label: "1" },
+          { value: "_LEVEL2@2", label: "2" },
+          { value: "_LEVEL3@3", label: "3" },
+          { value: "_LEVEL4@4", label: "4" },
+        ];
+      }
     }
     let result;
     let middleware = "";
@@ -200,11 +220,13 @@ const Header = () => {
           styles={customTierStyles}
           onChange={(selectedOption) => setSelectedTier(selectedOption)}
           getOptionValue={(option) => option.value}
+          placeholder="Выберите уровень"
         />
 
         <Select
           options={resourseOptions}
           onChange={(selectedOption) => setSelectedResourse(selectedOption)}
+          placeholder="Выберите ресурс"
         />
 
         <button onClick={startSearch}>Поиск</button>
