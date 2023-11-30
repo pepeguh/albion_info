@@ -82,6 +82,22 @@ const Header = () => {
     { value: "T7_", label: "T7" },
     { value: "T8_", label: "T8" },
   ];
+  const customResourseStyles={
+    option:(provided, state)=>({
+      ...provided,
+      color:'aliceblue',
+      backgroundColor:'#171717'
+    }),
+    groupHeading: (provided, state) => ({
+      ...provided,
+      color: 'aliceblue',  // Цвет текста заголовка группы
+      backgroundColor: '#171717',  // Цвет фона заголовка группы
+    }),
+    group: (provided, state) => ({
+      ...provided,
+      backgroundColor: '#171717', // Добавляем границу между группами
+    }),
+  }
   const customTierStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -140,6 +156,10 @@ const Header = () => {
   ];
 
   const startSearch = async () => {
+    if(selectedTier==undefined||selectedResourse==undefined||selectedTier==null||selectedResourse==null){
+      return
+    }
+    console.log(selectedResourse)
     if (
       selectedTier.label == "T1" ||
       selectedTier.label == "T2" ||
@@ -168,35 +188,28 @@ const Header = () => {
     }
     let result;
     let middleware = "";
-    for (let i = 0; i < enchantmentOptions.length; i++) {
-      middleware =
-        middleware +
-        selectedTier.value +
-        selectedResourse.value +
-        enchantmentOptions[i].value +
-        ",";
+    for(let j=0;j<selectedResourse.length;j++){
+      for (let i = 0; i < enchantmentOptions.length; i++) {
+        middleware =
+          middleware +
+          selectedTier.value +
+          selectedResourse[j].value +
+          enchantmentOptions[i].value +
+          ",";
+      }
+     
+
     }
     try {
       result = await fetch(
         baseUrl +
           middleware +
-          // selectedTier.value +
-          // selectedResourse.value +
-          // selectedEnchantment.value +
           baseMidUrl +
-          // selectedCity.value +
           baseEndUrl
       );
       result = await result.json();
       console.log(result);
-      // if (result[0].buy_price_max == 0) {
-      //   console.log("Автозакуп не найден");
-      //   return;
-      // } else if (result[0].sell_price_min == 0) {
-      //   console.log("Товар не найден");
-      //   return;
-      // }
-      dispatch(clearData());
+        dispatch(clearData());
       middleware = "";
       dispatch(addArray(result));
       console.log(`Максимальная цена автозакупа :${result[0].buy_price_max}
@@ -204,18 +217,12 @@ const Header = () => {
     } catch (e) {
       console.log(e, "Неправильный запрос");
     }
-    // console.log(baseUrl+selectedTier.value+selectedResourse.value+selectedEnchantment.value+baseMidUrl+selectedCity.value+baseEndUrl)
   };
   return (
     <div className="mainDiv">
       <div className="searchDiv">
-        {/* <Select
-          options={cityOptions}
-          styles={customCityStyles}
-          onChange={(selectedOption) => setSelectedCity(selectedOption)}
-          getOptionValue={(option) => option.value}
-        /> */}
-        <Select
+          <Select
+          className="tier_select"
           options={tierOptions}
           styles={customTierStyles}
           onChange={(selectedOption) => setSelectedTier(selectedOption)}
@@ -224,7 +231,10 @@ const Header = () => {
         />
 
         <Select
+        className="resourse_select"
           options={resourseOptions}
+          isMulti
+          styles={customResourseStyles}
           onChange={(selectedOption) => setSelectedResourse(selectedOption)}
           placeholder="Выберите ресурс"
         />

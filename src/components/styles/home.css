@@ -9,17 +9,43 @@
   margin-right: 3px;
 }
 .render_div {
+  background-color: #171717;
   font-size: small;
   border: 2px solid gold;
   display: grid;
   grid-template-columns: repeat(
-    2,
+    
+    5,
     1fr
   ); 
   gap: 16px; 
 }
+@media (max-width: 1200px) {
+  .render_div {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .render_div {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .render_div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .render_div {
+    grid-template-columns: 1fr;
+  }
+}
 .item_img {
-  width: 70px;
+  width: 75px;
+  height: 75px;
   
 }
 .color_div {
@@ -28,9 +54,17 @@
 .color_div p {
   padding-left: 8px;
 }
-
-.prices_div {
+.item_div{
   display: flex;
+
+}
+.prices_div {
+  width: calc(2*fit-content);
+  display: flexbox;
+  flex-direction: column;
+}
+.item{
+  width: fit-content;
 }
 
 .Lymhurst {

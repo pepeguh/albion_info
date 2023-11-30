@@ -22,6 +22,7 @@ const Home = () => {
         }
         // acc[key][`city${item.city}`] = item.city;
         acc[key][`sell_price_min${item.city}`] = item.sell_price_min;
+
         return acc;
       }, {});
       for (const key in groupedData) {
@@ -51,16 +52,21 @@ const Home = () => {
         <div className="render_div">
           {render.map((item, index) => (
             <div className={`item_div`} key={index}>
-              {isImageLoaded ? "" : <span className="loader"></span>}
-              <img
-                className="item_img"
-                src={`https://render.albiononline.com/v1/item/${item.item_id}`}
-                alt={<span className="loader"></span>}
-                onLoad={handleImageLoad}
-              />
+              {item.sell_price_minBridgewatch == 0 &&
+              item.sell_price_minCaerleon == 0 &&
+              item[`sell_price_minFort Sterling`] == 0 &&
+              item.sell_price_minLymhurst == 0&&
+              item.sell_price_minMartlock == 0 &&
+              item.sell_price_minThetford == 0 ? `По ${item.item_id.slice()} Данных нет` : (
+                <img
+                  className="item_img"
+                  src={`https://render.albiononline.com/v1/item/${item.item_id}`}
+                  alt=""
+                />
+              )}
               <div className="prices_div">
                 <div
-                  className={`Bridgewatch ${
+                  className={`Bridgewatch item ${
                     item.sell_price_minBridgewatch === 0 ? "" : "m_p"
                   }`}
                 >
@@ -69,7 +75,7 @@ const Home = () => {
                     : item.sell_price_minBridgewatch}
                 </div>
                 <div
-                  className={`Caerleon ${
+                  className={`Caerleon item ${
                     item.sell_price_minCaerleon === 0 ? "" : "m_p"
                   }`}
                 >
@@ -78,7 +84,7 @@ const Home = () => {
                     : item.sell_price_minCaerleon}
                 </div>
                 <div
-                  className={`Fort_Sterling ${
+                  className={`Fort_Sterling item ${
                     item[`sell_price_minFort Sterling`] === 0 ? "" : "m_p"
                   }`}
                 >
@@ -87,7 +93,7 @@ const Home = () => {
                     : item[`sell_price_minFort Sterling`]}
                 </div>
                 <div
-                  className={`Lymhurst ${
+                  className={`Lymhurst item ${
                     item.sell_price_minLymhurst === 0 ? "" : "m_p"
                   }`}
                 >
@@ -96,7 +102,7 @@ const Home = () => {
                     : item.sell_price_minLymhurst}
                 </div>
                 <div
-                  className={`Martlock ${
+                  className={`Martlock item ${
                     item.sell_price_minMartlock === 0 ? "" : "m_p"
                   }`}
                 >
@@ -105,7 +111,7 @@ const Home = () => {
                     : item.sell_price_minMartlock}
                 </div>
                 <div
-                  className={`Thetford ${
+                  className={`Thetford item ${
                     item.sell_price_minThetford === 0 ? "" : "m_p"
                   }`}
                 >
