@@ -3,14 +3,8 @@ import "./styles/home.css";
 import { useSelector } from "react-redux";
 const Home = () => {
   let getData = useSelector((state) => state.data);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   let render;
-  const handleImageLoad = () => {
-    if (!isImageLoaded) {
-      setIsImageLoaded(true);
-      console.log("Сработало");
-    }
-  };
 
   const convertData = (inputData) => {
     if (inputData !== undefined) {
@@ -35,8 +29,19 @@ const Home = () => {
   };
   if (getData.length !== 0) {
     render = convertData(getData[0]);
+    for(let i=0;i<render.length;i++){
+      if(render[i].sell_price_minBridgewatch == 0 &&
+        render[i].sell_price_minCaerleon == 0 &&
+        render[i][`sell_price_minFort Sterling`] == 0 &&
+        render[i].sell_price_minLymhurst == 0 &&
+        render[i].sell_price_minMartlock == 0 &&
+        render[i].sell_price_minThetford == 0){
+          render.splice(i,i)
+        }
+    }
   }
   console.log(render);
+
 
   return (
     <div className="main_div">
@@ -55,9 +60,11 @@ const Home = () => {
               {item.sell_price_minBridgewatch == 0 &&
               item.sell_price_minCaerleon == 0 &&
               item[`sell_price_minFort Sterling`] == 0 &&
-              item.sell_price_minLymhurst == 0&&
+              item.sell_price_minLymhurst == 0 &&
               item.sell_price_minMartlock == 0 &&
-              item.sell_price_minThetford == 0 ? `По ${item.item_id.slice()} Данных нет` : (
+              item.sell_price_minThetford == 0 ? (
+                `По ${item.item_id.slice()} Данных нет`
+              ) : (
                 <img
                   className="item_img"
                   src={`https://render.albiononline.com/v1/item/${item.item_id}`}

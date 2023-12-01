@@ -4,14 +4,16 @@ import goldFetch from "../logic/goldFetch";
 import "./styles/header.css";
 import { useDispatch } from "react-redux";
 import { addArray, clearData } from "../redux/reducers";
+import { resourseOptions, tierOptions } from "../select components/chooseOptions";
+import { customResourseStyles,customTierStyles,getTierColor } from "../select components/customStyles";
+import search_img from '../public/search_img.svg'
 const Header = () => {
   const dispatch = useDispatch();
   const [goldCost, setGoldCost] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  // const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedTier, setSelectedTier] = useState(null);
+   const [selectedTier, setSelectedTier] = useState(null);
   const [selectedResourse, setSelectedResourse] = useState(null);
-  const [selectedEnchantment, setSelectedEnchantment] = useState(null);
+
 
   const baseUrl = "https://east.albion-online-data.com/api/v2/stats/Prices/";
   const baseMidUrl = `.json?locations=Lymhurst,Fort Sterling,Bridgewatch,Martlock,Thetford,Caerleon`;
@@ -34,55 +36,8 @@ const Header = () => {
     if (selectedTier !== null) {
     }
   }, [selectedTier]);
-  // const cityOptions = [
-  //   { value: "Caerleon", label: "Caerleon" },
-  //   { value: "Lymhurst", label: "Lymhurst" },
-  //   { value: "Bridgewatch", label: "Bridgewatch" },
-  //   { value: "Martlock", label: "Martlock" },
-  //   { value: "Thetford", label: "Thetford" },
-  //   { value: "Fort Sterling", label: "Fort Sterling" },
-  // ];
-  // const customCityStyles = {
-  //   option: (provided, state) => ({
-  //     ...provided,
-  //     color: state.isSelected ? "" : getCityColor(state.data.value),
-  //     backgroundColor: state.isSelected
-  //       ? getCityColor(state.data.value)
-  //       : "#171717",
-  //   }),
-  //   singleValue: (provided, state) => ({
-  //     ...provided,
-  //     color: getCityColor(selectedCity?.value),
-  //   }),
-  // };
-
-  // const getCityColor = (city) => {
-  //   switch (city) {
-  //     case "Lymhurst":
-  //       return "#15E831";
-  //     case "Caerleon":
-  //       return "#CB171D";
-  //     case "Thetford":
-  //       return "#E815E1";
-  //     case "Bridgewatch":
-  //       return "#FFEE49";
-  //     case "Martlock":
-  //       return "#2CDBFF";
-  //     case "Fort Sterling":
-  //       return "#E2FEFF";
-  //   }
-  // };
-  const tierOptions = [
-    { value: "T1_", label: "T1" },
-    { value: "T2_", label: "T2" },
-    { value: "T3_", label: "T3" },
-    { value: "T4_", label: "T4" },
-    { value: "T5_", label: "T5" },
-    { value: "T6_", label: "T6" },
-    { value: "T7_", label: "T7" },
-    { value: "T8_", label: "T8" },
-  ];
-  const customResourseStyles={
+ 
+   const customResourseStyles={
     option:(provided, state)=>({
       ...provided,
       color:'aliceblue',
@@ -90,15 +45,16 @@ const Header = () => {
     }),
     groupHeading: (provided, state) => ({
       ...provided,
-      color: 'aliceblue',  // Цвет текста заголовка группы
-      backgroundColor: '#171717',  // Цвет фона заголовка группы
+      color: 'aliceblue',  
+      backgroundColor: '#171717',  
     }),
     group: (provided, state) => ({
       ...provided,
-      backgroundColor: '#171717', // Добавляем границу между группами
+      border: '1px solid gray',
+      backgroundColor: '#171717', 
     }),
   }
-  const customTierStyles = {
+ const customTierStyles = {
     option: (provided, state) => ({
       ...provided,
       color: state.isSelected ? "" : getTierColor(state.data.label),
@@ -132,28 +88,7 @@ const Header = () => {
     }
   };
 
-  const resourseOptions = [
-    {
-      label: "Ресурсы",
-      options: [
-        { value: "WOOD", label: "Дерево" },
-        { value: "ROCK", label: "Камень" },
-        { value: "ORE", label: "Руда" },
-        { value: "HIDE", label: "Шкура" },
-        { value: "FIBER", label: "Хлопок" },
-      ],
-    },
-    {
-      label: "Материалы",
-      options: [
-        { value: "PLANKS", label: "Доски" },
-        { value: "STONEBLOCK", label: "Камменые блоки" },
-        { value: "METALBAR", label: "Слитки" },
-        { value: "LEATHER", label: "Кожа" },
-        { value: "CLOTH", label: "Ткань" },
-      ],
-    },
-  ];
+ 
 
   const startSearch = async () => {
     if(selectedTier==undefined||selectedResourse==undefined||selectedTier==null||selectedResourse==null){
@@ -225,6 +160,7 @@ const Header = () => {
           className="tier_select"
           options={tierOptions}
           styles={customTierStyles}
+          maxMenuHeight={'720px'}
           onChange={(selectedOption) => setSelectedTier(selectedOption)}
           getOptionValue={(option) => option.value}
           placeholder="Выберите уровень"
@@ -234,12 +170,15 @@ const Header = () => {
         className="resourse_select"
           options={resourseOptions}
           isMulti
+          maxMenuHeight={'720px'}
           styles={customResourseStyles}
           onChange={(selectedOption) => setSelectedResourse(selectedOption)}
           placeholder="Выберите ресурс"
         />
+        <div className="search_div_img">
+        <img src={search_img} className="search_img" onClick={startSearch}></img>
 
-        <button onClick={startSearch}>Поиск</button>
+        </div>
       </div>
       {isLoading ? (
         <div className="goldCost">Курс золота: Loading...</div>
